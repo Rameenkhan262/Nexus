@@ -6,6 +6,8 @@ import {
   Bell, FileText, Settings, HelpCircle
 } from 'lucide-react';
 
+import { CalendarDays } from 'lucide-react';
+
 interface SidebarItemProps {
   to: string;
   icon: React.ReactNode;
@@ -19,8 +21,8 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ to, icon, text }) => {
       className={({ isActive }) => 
         `flex items-center py-2.5 px-4 rounded-md transition-colors duration-200 ${
           isActive 
-            ? 'bg-primary-50 text-primary-700' 
-            : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+            ? 'bg-blue-100 text-blue-600 font-semibold' 
+            : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-lg'
         }`
       }
     >
@@ -43,6 +45,7 @@ export const Sidebar: React.FC = () => {
     { to: '/messages', icon: <MessageCircle size={20} />, text: 'Messages' },
     { to: '/notifications', icon: <Bell size={20} />, text: 'Notifications' },
     { to: '/documents', icon: <FileText size={20} />, text: 'Documents' },
+    { to: '/calendar', icon: <CalendarDays size={20} />, text: 'Calendar' },
   ];
   
   const investorItems = [
@@ -52,6 +55,7 @@ export const Sidebar: React.FC = () => {
     { to: '/messages', icon: <MessageCircle size={20} />, text: 'Messages' },
     { to: '/notifications', icon: <Bell size={20} />, text: 'Notifications' },
     { to: '/deals', icon: <FileText size={20} />, text: 'Deals' },
+    { to: '/calendar', icon: <CalendarDays size={20} />, text: 'Calendar' },
   ];
   
   const sidebarItems = user.role === 'entrepreneur' ? entrepreneurItems : investorItems;
@@ -63,7 +67,7 @@ export const Sidebar: React.FC = () => {
   ];
   
   return (
-    <div className="w-64 bg-white h-full border-r border-gray-200 hidden md:block">
+    <div className="w-64 bg-white h-full border-r border-gray-100 shadow-sm hidden md:block">
       <div className="h-full flex flex-col">
         <div className="flex-1 py-4 overflow-y-auto">
           <div className="px-3 space-y-1">

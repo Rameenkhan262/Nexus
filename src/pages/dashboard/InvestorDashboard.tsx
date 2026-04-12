@@ -10,38 +10,34 @@ import { useAuth } from '../../context/AuthContext';
 import { Entrepreneur } from '../../types';
 import { entrepreneurs } from '../../data/users';
 import { getRequestsFromInvestor } from '../../data/collaborationRequests';
+import { useMeetings } from "../../context/MeetingContext";
 
 export const InvestorDashboard: React.FC = () => {
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
+  const { confirmedMeetings } = useMeetings();
   
   if (!user) return null;
   
-  // Get collaboration requests sent by this investor
   const sentRequests = getRequestsFromInvestor(user.id);
   const requestedEntrepreneurIds = sentRequests.map(req => req.entrepreneurId);
   
-  // Filter entrepreneurs based on search and industry filters
   const filteredEntrepreneurs = entrepreneurs.filter(entrepreneur => {
-    // Search filter
     const matchesSearch = searchQuery === '' || 
       entrepreneur.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       entrepreneur.startupName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       entrepreneur.industry.toLowerCase().includes(searchQuery.toLowerCase()) ||
       entrepreneur.pitchSummary.toLowerCase().includes(searchQuery.toLowerCase());
     
-    // Industry filter
     const matchesIndustry = selectedIndustries.length === 0 || 
       selectedIndustries.includes(entrepreneur.industry);
     
     return matchesSearch && matchesIndustry;
   });
   
-  // Get unique industries for filter
   const industries = Array.from(new Set(entrepreneurs.map(e => e.industry)));
   
-  // Toggle industry selection
   const toggleIndustry = (industry: string) => {
     setSelectedIndustries(prevSelected => 
       prevSelected.includes(industry)
@@ -52,6 +48,8 @@ export const InvestorDashboard: React.FC = () => {
   
   return (
     <div className="space-y-6 animate-fade-in">
+      
+      {/* HEADER */}
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Discover Startups</h1>
@@ -59,15 +57,13 @@ export const InvestorDashboard: React.FC = () => {
         </div>
         
         <Link to="/entrepreneurs">
-          <Button
-            leftIcon={<PlusCircle size={18} />}
-          >
+          <Button leftIcon={<PlusCircle size={18} />}>
             View All Startups
           </Button>
         </Link>
       </div>
       
-      {/* Filters and search */}
+      {/* FILTERS */}
       <div className="flex flex-col md:flex-row gap-4">
         <div className="w-full md:w-2/3">
           <Input
@@ -100,8 +96,9 @@ export const InvestorDashboard: React.FC = () => {
         </div>
       </div>
       
-      {/* Stats summary */}
+      {/* STATS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
         <Card className="bg-primary-50 border border-primary-100">
           <CardBody>
             <div className="flex items-center">
@@ -129,7 +126,7 @@ export const InvestorDashboard: React.FC = () => {
             </div>
           </CardBody>
         </Card>
-        
+
         <Card className="bg-accent-50 border border-accent-100">
           <CardBody>
             <div className="flex items-center">
@@ -145,9 +142,30 @@ export const InvestorDashboard: React.FC = () => {
             </div>
           </CardBody>
         </Card>
+
+      </div>
+
+      {/* ✅ CONFIRMED MEETINGS (MOVED HERE + SCROLLABLE) */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+        <h3 className="font-semibold mb-2">📅 Confirmed Meetings</h3>
+
+        <div className="h-48 overflow-y-auto space-y-2 pr-2">
+  {confirmedMeetings.length === 0 && (
+    <p className="text-gray-500 text-sm">No meetings yet</p>
+  )}
+
+  {confirmedMeetings.map((m, i) => (
+    <div
+      key={i}
+      className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm"
+    >
+      {m.date.toDateString()}
+    </div>
+  ))}
+</div>
       </div>
       
-      {/* Entrepreneurs grid */}
+      {/* STARTUPS */}
       <div>
         <Card>
           <CardHeader>

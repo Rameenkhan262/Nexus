@@ -10,163 +10,196 @@ import { useAuth } from '../../context/AuthContext';
 import { CollaborationRequest } from '../../types';
 import { getRequestsForEntrepreneur } from '../../data/collaborationRequests';
 import { investors } from '../../data/users';
+import { useMeetings } from "../../context/MeetingContext";
 
 export const EntrepreneurDashboard: React.FC = () => {
   const { user } = useAuth();
   const [collaborationRequests, setCollaborationRequests] = useState<CollaborationRequest[]>([]);
-  const [recommendedInvestors, setRecommendedInvestors] = useState(investors.slice(0, 3));
-  
+  const [recommendedInvestors] = useState(investors.slice(0, 3));
+  const { confirmedMeetings } = useMeetings();
+
   useEffect(() => {
     if (user) {
-      // Load collaboration requests
       const requests = getRequestsForEntrepreneur(user.id);
       setCollaborationRequests(requests);
     }
   }, [user]);
-  
+
   const handleRequestStatusUpdate = (requestId: string, status: 'accepted' | 'rejected') => {
-    setCollaborationRequests(prevRequests => 
-      prevRequests.map(req => 
-        req.id === requestId ? { ...req, status } : req
-      )
+    setCollaborationRequests(prev =>
+      prev.map(req => (req.id === requestId ? { ...req, status } : req))
     );
   };
-  
+
   if (!user) return null;
-  
+
   const pendingRequests = collaborationRequests.filter(req => req.status === 'pending');
-  
+
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6">
+      {/* Header */}
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Welcome, {user.name}</h1>
           <p className="text-gray-600">Here's what's happening with your startup today</p>
         </div>
-        
+
         <Link to="/investors">
-          <Button
-            leftIcon={<PlusCircle size={18} />}
-          >
+          <Button leftIcon={<PlusCircle size={18} />}>
             Find Investors
           </Button>
         </Link>
       </div>
-      
-      {/* Summary cards */}
+
+      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-primary-50 border border-primary-100">
-          <CardBody>
-            <div className="flex items-center">
-              <div className="p-3 bg-primary-100 rounded-full mr-4">
-                <Bell size={20} className="text-primary-700" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-primary-700">Pending Requests</p>
-                <h3 className="text-xl font-semibold text-primary-900">{pendingRequests.length}</h3>
-              </div>
-            </div>
-          </CardBody>
-        </Card>
-        
-        <Card className="bg-secondary-50 border border-secondary-100">
-          <CardBody>
-            <div className="flex items-center">
-              <div className="p-3 bg-secondary-100 rounded-full mr-4">
-                <Users size={20} className="text-secondary-700" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-secondary-700">Total Connections</p>
-                <h3 className="text-xl font-semibold text-secondary-900">
-                  {collaborationRequests.filter(req => req.status === 'accepted').length}
-                </h3>
-              </div>
-            </div>
-          </CardBody>
-        </Card>
-        
-        <Card className="bg-accent-50 border border-accent-100">
-          <CardBody>
-            <div className="flex items-center">
-              <div className="p-3 bg-accent-100 rounded-full mr-4">
-                <Calendar size={20} className="text-accent-700" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-accent-700">Upcoming Meetings</p>
-                <h3 className="text-xl font-semibold text-accent-900">2</h3>
-              </div>
-            </div>
-          </CardBody>
-        </Card>
-        
-        <Card className="bg-success-50 border border-success-100">
-          <CardBody>
-            <div className="flex items-center">
-              <div className="p-3 bg-green-100 rounded-full mr-4">
-                <TrendingUp size={20} className="text-success-700" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-success-700">Profile Views</p>
-                <h3 className="text-xl font-semibold text-success-900">24</h3>
-              </div>
-            </div>
-          </CardBody>
-        </Card>
-      </div>
+        <Card className="bg-blue-50 border border-blue-100">
+  <CardBody>
+    <div className="flex items-center">
       
+      {/* ICON */}
+      <div className="p-3 bg-blue-100 rounded-full mr-4">
+        <Bell size={20} className="text-blue-600" />
+      </div>
+
+      {/* TEXT */}
+      <div>
+        <p className="text-sm font-medium text-blue-600">
+          Pending Requests
+        </p>
+        <h3 className="text-xl font-semibold text-blue-900">
+          {pendingRequests.length}
+        </h3>
+      </div>
+
+    </div>
+  </CardBody>
+</Card>
+
+        <Card className="bg-green-50 border border-green-100">
+  <CardBody>
+    <div className="flex items-center">
+      <div className="p-3 bg-green-100 rounded-full mr-4">
+        <Users size={20} className="text-green-600" />
+      </div>
+      <div>
+        <p className="text-sm font-medium text-green-600">
+          Total Connections
+        </p>
+        <h3 className="text-xl font-semibold text-green-900">
+  {collaborationRequests.filter(r => r.status === 'accepted').length}
+</h3>
+      </div>
+    </div>
+  </CardBody>
+</Card>
+
+        <Card className="bg-yellow-50 border border-yellow-100">
+  <CardBody>
+    <div className="flex items-center">
+      <div className="p-3 bg-yellow-100 rounded-full mr-4">
+        <Calendar size={20} className="text-yellow-600" />
+      </div>
+      <div>
+        <p className="text-sm font-medium text-yellow-600">
+          Upcoming Meetings
+        </p>
+        <h3 className="text-xl font-semibold text-yellow-900">
+          2
+        </h3>
+      </div>
+    </div>
+  </CardBody>
+</Card>
+
+        <Card className="bg-gray-50 border border-gray-200">
+  <CardBody>
+    <div className="flex items-center">
+      <div className="p-3 bg-gray-100 rounded-full mr-4">
+        <TrendingUp size={20} className="text-gray-600" />
+      </div>
+      <div>
+        <p className="text-sm font-medium text-gray-600">
+          Profile Views
+        </p>
+        <h3 className="text-xl font-semibold text-gray-900">
+          24
+        </h3>
+      </div>
+    </div>
+  </CardBody>
+</Card>
+
+      </div>
+
+      {/* MAIN GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Collaboration requests */}
-        <div className="lg:col-span-2 space-y-4">
+
+        {/* LEFT */}
+        <div className="lg:col-span-2">
           <Card>
-            <CardHeader className="flex justify-between items-center">
-              <h2 className="text-lg font-medium text-gray-900">Collaboration Requests</h2>
-              <Badge variant="primary">{pendingRequests.length} pending</Badge>
+            <CardHeader>
+              <h2 className="text-lg font-semibold">Collaboration Requests</h2>
             </CardHeader>
-            
+
             <CardBody>
               {collaborationRequests.length > 0 ? (
                 <div className="space-y-4">
-                  {collaborationRequests.map(request => (
+                  {collaborationRequests.map(req => (
                     <CollaborationRequestCard
-                      key={request.id}
-                      request={request}
+                      key={req.id}
+                      request={req}
                       onStatusUpdate={handleRequestStatusUpdate}
                     />
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
-                    <AlertCircle size={24} className="text-gray-500" />
-                  </div>
-                  <p className="text-gray-600">No collaboration requests yet</p>
-                  <p className="text-sm text-gray-500 mt-1">When investors are interested in your startup, their requests will appear here</p>
-                </div>
+                <p>No requests</p>
               )}
             </CardBody>
           </Card>
         </div>
-        
-        {/* Recommended investors */}
-        <div className="space-y-4">
+
+        {/* RIGHT */}
+        <div className="space-y-6">
+
+          {/* CONFIRMED MEETINGS */}
+          <Card className="bg-white border border-gray-200 shadow-sm">
+  <CardHeader>
+    <h2 className="text-lg font-semibold">Confirmed Meetings</h2>
+  </CardHeader>
+
+  <CardBody>
+    <div className="h-48 overflow-y-auto space-y-2 pr-2">
+      {confirmedMeetings.length === 0 && (
+        <p className="text-gray-500 text-sm">No meetings yet</p>
+      )}
+
+      {confirmedMeetings.map((m, i) => (
+        <div
+          key={i}
+          className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm"
+        >
+          {m.date.toDateString()}
+        </div>
+      ))}
+    </div>
+  </CardBody>
+</Card>
+
+          {/* RECOMMENDED INVESTORS */}
           <Card>
-            <CardHeader className="flex justify-between items-center">
-              <h2 className="text-lg font-medium text-gray-900">Recommended Investors</h2>
-              <Link to="/investors" className="text-sm font-medium text-primary-600 hover:text-primary-500">
-                View all
-              </Link>
+            <CardHeader>
+              <h2 className="text-lg font-semibold">Recommended Investors</h2>
             </CardHeader>
-            
+
             <CardBody className="space-y-4">
-              {recommendedInvestors.map(investor => (
-                <InvestorCard
-                  key={investor.id}
-                  investor={investor}
-                  showActions={false}
-                />
+              {recommendedInvestors.map(inv => (
+                <InvestorCard key={inv.id} investor={inv} showActions={false} />
               ))}
             </CardBody>
           </Card>
+
         </div>
       </div>
     </div>
