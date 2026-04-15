@@ -44,7 +44,7 @@ export const LoginPage: React.FC = () => {
   };
   
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#1e3a8a]">
+    <div className="h-screen flex items-center justify-center px-4 bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#1e3a8a]">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center shadow">
@@ -65,8 +65,8 @@ export const LoginPage: React.FC = () => {
         </p>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-       <div className="bg-white py-8 px-6 shadow-xl rounded-2xl sm:px-10">
+      <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-sm">
+       <div className="bg-white py-6 px-5 shadow-xl rounded-2xl sm:px-8">
           {error && (
             <div className="mb-4 bg-error-50 border border-error-500 text-error-700 px-4 py-3 rounded-lg flex items-start">
               <AlertCircle size={18} className="mr-2 mt-0.5" />
@@ -74,7 +74,7 @@ export const LoginPage: React.FC = () => {
             </div>
           )}
           
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 I am a

@@ -33,7 +33,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Find user with matching email and role
-      const foundUser = users.find(u => u.email === email && u.role === role);
+      const storedUsers = JSON.parse(localStorage.getItem("users") || "[]");
+
+const foundUser = storedUsers.find(
+  (u: any) =>
+    u.email === email &&
+    u.password === password &&
+    u.role === role
+);
       
       if (foundUser) {
         setUser(foundUser);
@@ -76,7 +83,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       };
       
       // Add user to mock data
-      users.push(newUser);
+      const existingUsers = JSON.parse(localStorage.getItem("users") || "[]");
+
+localStorage.setItem(
+  "users",
+  JSON.stringify([...existingUsers, { ...newUser, password }])
+);
       
       setUser(newUser);
       localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(newUser));
