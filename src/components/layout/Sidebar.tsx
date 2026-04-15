@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 
 import { CalendarDays } from 'lucide-react';
+import { DollarSign } from 'lucide-react';
 
 interface SidebarItemProps {
   to: string;
@@ -21,8 +22,8 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ to, icon, text }) => {
       className={({ isActive }) => 
         `flex items-center py-2.5 px-4 rounded-md transition-colors duration-200 ${
           isActive 
-            ? 'bg-blue-100 text-blue-600 font-semibold' 
-            : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 rounded-lg'
+  ? 'bg-gradient-to-r from-blue-500 to-blue-400 text-white shadow-lg font-semibold shadow'
+  : 'text-blue-100 hover:bg-white/10 hover:text-white'
         }`
       }
     >
@@ -48,6 +49,7 @@ export const Sidebar: React.FC = () => {
     { to: '/calendar', icon: <CalendarDays size={20} />, text: 'Calendar' },
     { to: '/video-call', icon: <Video size={20} />, text: 'Video Call' },
     { to: '/document-chamber', icon: <FileText size={20} />, text: 'Document Chamber' },
+    { to: '/payments', icon: <DollarSign size={20} />, text: 'Payments' },
   ];
   
   const investorItems = [
@@ -60,6 +62,7 @@ export const Sidebar: React.FC = () => {
     { to: '/calendar', icon: <CalendarDays size={20} />, text: 'Calendar' },
     { to: '/video-call', icon: <Video size={20} />, text: 'Video Call' },
     { to: '/document-chamber', icon: <FileText size={20} />, text: 'Document Chamber' },
+    { to: '/payments', icon: <DollarSign size={20} />, text: 'Payments' },
   ];
   
   const sidebarItems = user.role === 'entrepreneur' ? entrepreneurItems : investorItems;
@@ -71,7 +74,7 @@ export const Sidebar: React.FC = () => {
   ];
   
   return (
-    <div className="w-64 bg-white h-full border-r border-gray-100 shadow-sm hidden md:block">
+    <div className="w-64 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#1e3a8a] text-white h-full shadow-lg hidden md:block">
       <div className="h-full flex flex-col">
         <div className="flex-1 py-4 overflow-y-auto">
           <div className="px-3 space-y-1">
@@ -86,7 +89,7 @@ export const Sidebar: React.FC = () => {
           </div>
           
           <div className="mt-8 px-3">
-            <h3 className="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <h3 className="px-4 text-xs font-semibold text-blue-200 uppercase tracking-wider">
               Settings
             </h3>
             <div className="mt-2 space-y-1">
@@ -103,9 +106,9 @@ export const Sidebar: React.FC = () => {
         </div>
         
         <div className="p-4 border-t border-gray-200">
-          <div className="bg-gray-50 rounded-md p-3">
-            <p className="text-xs text-gray-600">Need assistance?</p>
-            <h4 className="text-sm font-medium text-gray-900 mt-1">Contact Support</h4>
+          <div className="bg-blue-800 rounded-lg p-3">
+            <p className="text-xs text-blue-200">Need assistance?</p>
+            <h4 className="text-sm font-medium text-white mt-1">Contact Support</h4>
             <a 
               href="mailto:support@businessnexus.com" 
               className="mt-2 inline-flex items-center text-xs font-medium text-primary-600 hover:text-primary-500"

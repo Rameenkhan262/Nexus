@@ -39,6 +39,11 @@ import { VideoCallPage } from './pages/video/VideoCallPage';
 //document
 import { DocumentChamberPage } from './pages/documents/DocumentChamberPage';
 
+//payment
+import { PaymentPage } from './pages/payments/PaymentPage';
+
+import { OtpPage } from "./pages/auth/OtpPage";
+
 function App() {
   return (
     <AuthProvider>
@@ -119,6 +124,13 @@ function App() {
         <Route path="/document-chamber" element={<DashboardLayout />}>
   <Route index element={<DocumentChamberPage />} />
 </Route>
+
+        {/*payment*/}
+        <Route path="/payments" element={<DashboardLayout />}>
+  <Route index element={<PaymentPage />} />
+</Route>
+
+        <Route path="/otp" element={<OtpPage />} />
 
         </Routes>
       </Router>

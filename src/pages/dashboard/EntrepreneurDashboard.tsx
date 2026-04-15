@@ -11,12 +11,18 @@ import { CollaborationRequest } from '../../types';
 import { getRequestsForEntrepreneur } from '../../data/collaborationRequests';
 import { investors } from '../../data/users';
 import { useMeetings } from "../../context/MeetingContext";
+import { usePayments } from "../../context/PaymentContext";
 
 export const EntrepreneurDashboard: React.FC = () => {
+  const { balance } = usePayments();
   const { user } = useAuth();
   const [collaborationRequests, setCollaborationRequests] = useState<CollaborationRequest[]>([]);
   const [recommendedInvestors] = useState(investors.slice(0, 3));
-  const { confirmedMeetings } = useMeetings();
+ const { meetings } = useMeetings();
+
+const confirmedMeetings = meetings.filter(
+  (m: any) => m.status === "confirmed"
+);
 
   useEffect(() => {
     if (user) {
@@ -130,6 +136,22 @@ export const EntrepreneurDashboard: React.FC = () => {
   </CardBody>
 </Card>
 
+<Card className="bg-green-50 border border-green-100">
+  <CardBody>
+    <div className="flex items-center">
+      <div className="p-3 bg-green-100 rounded-full mr-4">
+        💰
+      </div>
+      <div>
+        <p className="text-sm text-green-600">Wallet Balance</p>
+        <h3 className="text-xl font-bold text-green-900">
+          ${balance}
+        </h3>
+      </div>
+    </div>
+  </CardBody>
+</Card>
+
       </div>
 
       {/* MAIN GRID */}
@@ -171,16 +193,16 @@ export const EntrepreneurDashboard: React.FC = () => {
 
   <CardBody>
     <div className="h-48 overflow-y-auto space-y-2 pr-2">
-      {confirmedMeetings.length === 0 && (
+      {(confirmedMeetings?.length || 0) === 0 && (
         <p className="text-gray-500 text-sm">No meetings yet</p>
       )}
 
-      {confirmedMeetings.map((m, i) => (
+      {confirmedMeetings?.map((m: any, i: number) => (
         <div
           key={i}
           className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm"
         >
-          {m.date.toDateString()}
+          {new Date(m.date).toDateString()} - {m.time}
         </div>
       ))}
     </div>

@@ -11,12 +11,18 @@ import { Entrepreneur } from '../../types';
 import { entrepreneurs } from '../../data/users';
 import { getRequestsFromInvestor } from '../../data/collaborationRequests';
 import { useMeetings } from "../../context/MeetingContext";
+import { usePayments } from "../../context/PaymentContext";
 
 export const InvestorDashboard: React.FC = () => {
+  const { balance } = usePayments();
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>([]);
-  const { confirmedMeetings } = useMeetings();
+ const { meetings } = useMeetings();
+
+const confirmedMeetings = meetings.filter(
+  (m: any) => m.status === "confirmed"
+);
   
   if (!user) return null;
   
@@ -81,16 +87,19 @@ export const InvestorDashboard: React.FC = () => {
             <span className="text-sm font-medium text-gray-700">Filter by:</span>
             
             <div className="flex flex-wrap gap-2">
-              {industries.map(industry => (
-                <Badge
-                  key={industry}
-                  variant={selectedIndustries.includes(industry) ? 'primary' : 'gray'}
-                  className="cursor-pointer"
-                  onClick={() => toggleIndustry(industry)}
-                >
-                  {industry}
-                </Badge>
-              ))}
+             {industries.map(industry => (
+  <div
+    key={industry}
+    onClick={() => toggleIndustry(industry)}
+    className="cursor-pointer"
+  >
+    <Badge
+      variant={selectedIndustries.includes(industry) ? 'primary' : 'gray'}
+    >
+      {industry}
+    </Badge>
+  </div>
+))}
             </div>
           </div>
         </div>
@@ -143,6 +152,22 @@ export const InvestorDashboard: React.FC = () => {
           </CardBody>
         </Card>
 
+        <Card className="bg-green-50 border border-green-100">
+  <CardBody>
+    <div className="flex items-center">
+      <div className="p-3 bg-green-100 rounded-full mr-4">
+        💰
+      </div>
+      <div>
+        <p className="text-sm text-green-600">Wallet Balance</p>
+        <h3 className="text-xl font-bold text-green-900">
+          ${balance}
+        </h3>
+      </div>
+    </div>
+  </CardBody>
+</Card>
+
       </div>
 
       {/* ✅ CONFIRMED MEETINGS (MOVED HERE + SCROLLABLE) */}
@@ -150,16 +175,16 @@ export const InvestorDashboard: React.FC = () => {
         <h3 className="font-semibold mb-2">📅 Confirmed Meetings</h3>
 
         <div className="h-48 overflow-y-auto space-y-2 pr-2">
-  {confirmedMeetings.length === 0 && (
+  {(confirmedMeetings?.length || 0) === 0 && (
     <p className="text-gray-500 text-sm">No meetings yet</p>
   )}
 
-  {confirmedMeetings.map((m, i) => (
+  {confirmedMeetings?.map((m: any, i: number) => (
     <div
       key={i}
       className="bg-white border border-gray-200 rounded-lg p-3 shadow-sm"
     >
-      {m.date.toDateString()}
+      {new Date(m.date).toDateString()}
     </div>
   ))}
 </div>

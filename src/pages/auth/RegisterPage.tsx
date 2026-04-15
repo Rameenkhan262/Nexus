@@ -39,6 +39,15 @@ export const RegisterPage: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  const getStrength = (pwd: string) => {
+  let strength = 0;
+  if (pwd.length > 5) strength++;
+  if (/[A-Z]/.test(pwd)) strength++;
+  if (/[0-9]/.test(pwd)) strength++;
+  if (/[^A-Za-z0-9]/.test(pwd)) strength++;
+  return strength;
+};
   
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -131,6 +140,18 @@ export const RegisterPage: React.FC = () => {
               fullWidth
               startAdornment={<Lock size={18} />}
             />
+
+            <div className="h-2 w-full bg-gray-200 rounded mt-2">
+  <div
+    className={`h-full rounded transition-all ${
+      getStrength(password) === 1 ? "bg-red-500 w-1/4" :
+      getStrength(password) === 2 ? "bg-yellow-500 w-2/4" :
+      getStrength(password) === 3 ? "bg-blue-500 w-3/4" :
+      getStrength(password) === 4 ? "bg-green-500 w-full" :
+      "w-0"
+    }`}
+  />
+</div>
             
             <Input
               label="Confirm password"
