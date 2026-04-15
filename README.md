@@ -8,7 +8,7 @@ Nexus is a web platform designed to connect entrepreneurs with investors for col
 
 ## Live Demo
 
-Vercel Deployment: [https://your-vercel-link](https://nexus-fkk66asml-khanrameen262-4020s-projects.vercel.app/login)
+Vercel Deployment: https://nexus-black-three.vercel.app/login
 GitHub Repository: [https://your-github-link](https://github.com/Rameenkhan262/Nexus)
 
 ---
